@@ -1,27 +1,6 @@
 {
   "properties": {
-    "displayName": "Restrict HTTP Traffic (Ports 80 and 443)",
-    "policyType": "Custom",
     "mode": "All",
-    "description": "Disallow the creation of security rules permitting inbound traffic on ports specified by parameters.",
-    "parameters": {
-      "restrictedPorts": {
-        "type": "Array",
-        "metadata": {
-          "description": "The list of ports that should be restricted",
-          "displayName": "Restricted Ports"
-        },
-        "defaultValue": ["80", "443"]
-      },
-      "allowedAction": {
-        "type": "String",
-        "metadata": {
-          "description": "The action to be performed when the policy condition matches (e.g., deny or audit).",
-          "displayName": "Allowed Action"
-        },
-        "defaultValue": "deny"
-      }
-    },
     "policyRule": {
       "if": {
         "allOf": [
@@ -34,15 +13,59 @@
             "equals": "Inbound"
           },
           {
-            "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
-            "in": "[parameters('restrictedPorts')]"
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/access",
+            "equals": "Allow"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                "equals": "80"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                "equals": "443"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                "equals": "http"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                "equals": "https"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+                "equals": "80"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+                "equals": "443"
+              }
+            ]
           }
         ]
       },
       "then": {
-        "effect": "[parameters('allowedAction')]"
+        "effect": "[parameters('effect')]"
       }
     },
-    "nonComplianceMessage": "Inbound traffic on ports 80 (HTTP) or 443 (HTTPS) is not allowed.\nPlease ensure that security rules do not permit traffic on these ports."
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": ["audit", "deny", "disabled"],
+        "defaultValue": "deny"
+      }
+    },
+    "displayName": "Restrict inbound HTTP/HTTPS traffic in Network Security Groups",
+    "description": "This policy restricts the creation of NSG rules that allow inbound HTTP (80) or HTTPS (443) traffic",
+    "category": "Network",
+    "nonComplianceMessage": {
+      "message": "Inbound HTTP (port 80) and HTTPS (port 443) traffic must be restricted in Network Security Groups."
+    }
   }
 }
