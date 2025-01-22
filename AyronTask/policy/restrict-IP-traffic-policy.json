@@ -42,6 +42,7 @@
       "then": {
         "effect": "[parameters('allowedAction')]"
       }
-    }
+    },
+    "nonComplianceMessage": "Inbound traffic from the source IP address 1.2.3.4 is not permitted. Please review your security rules and remove any inbound traffic configurations from this IP."
   }
 }

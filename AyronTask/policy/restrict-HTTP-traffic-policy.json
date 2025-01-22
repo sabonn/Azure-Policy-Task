@@ -42,6 +42,7 @@
       "then": {
         "effect": "[parameters('allowedAction')]"
       }
-    }
+    },
+    "nonComplianceMessage": "Inbound traffic on ports 80 (HTTP) or 443 (HTTPS) is not allowed. Please ensure that security rules do not permit traffic on these ports."
   }
 }

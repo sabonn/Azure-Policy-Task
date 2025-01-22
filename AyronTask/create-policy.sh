@@ -11,7 +11,8 @@ while getopts "p:d:s:f:" opt; do
   case "$opt" in
     p) POLICY_NAME="$OPTARG" ;;
     f) POLICY_DEFINITION_FILE="$OPTARG" ;;
-    *) echo "Usage: $0 [-p policy_name] [-f path_to_policy_definition_file]"&& exit 1 ;;
+    m) NON_COMPLIANCE_MESSAGE="$OPTARG" ;;
+    *) echo "Usage: $0 [-p policy_name] [-f path_to_policy_definition_file] [-m non_compliance_message]"&& exit 1 ;;
   esac
 done
 
@@ -28,6 +29,7 @@ DESCRIPTION=$(jq -r '.properties.description' "$POLICY_DEFINITION_FILE")
 MODE=$(jq -r '.properties.mode' "$POLICY_DEFINITION_FILE")
 PARAMETERS=$(jq -r '.properties.parameters' "$POLICY_DEFINITION_FILE")
 POLICY_RULE=$(jq -r '.properties.policyRule' "$POLICY_DEFINITION_FILE")
+NON_COMPLIANCE_MESSAGE=$(jq -r '.properties.nonComplianceMessage' "$POLICY_DEFINITION_FILE")
 
 # Step 3: Create the policy definition using parsed values
 echo "Creating the Azure Policy Definition..."
@@ -39,15 +41,22 @@ az policy definition create \
   --rules "$POLICY_RULE" \
   --params "$PARAMETERS"
 
-echo "Policy created successfully."
-# Step 4: Assign the policy
 
+echo "Policy created successfully."
+
+# Step 4: Assign the policy
 echo "Assigning the Azure Policy..."
 az policy assignment create \
   --name "$ASSIGNMENT_NAME" \
   --policy "$POLICY_NAME" \
 
-# Step 5: Set up resources for testing
+#Step 5: Assign a non-compliance message
+echo "Adding the Non Compliance Message"
+az policy assignment non-compliance-message create \
+    --message "$NON_COMPLIANCE_MESSAGE" \
+    --name "$ASSIGNMENT_NAME"
+
+# Step 6: Set up resources for testing
 echo "Creating a Network Security Group for testing..."
 az network nsg create \
   --resource-group "$RESOURCE_GROUP" \

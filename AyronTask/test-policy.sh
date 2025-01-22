@@ -6,10 +6,10 @@ NSG_NAME="TestNSG"
 ASSIGNMENT_NAME="Restrict-HTTP-Traffic-Assignment"
 
 # Parse command-line arguments for tests
-while getopts "p:" opt; do
+while getopts "t:" opt; do
   case "$opt" in
-    p) POLICY_NAME="$OPTARG" ;;
-    *) echo "Usage: $0 [-p policy_name]" && exit 1 ;;
+    t) POLICY_TEST="$OPTARG" ;;
+    *) echo "Usage: $0 [-p policy_test.\n 1 = test_restrict_udp_traffic\n 2 = test_restrict_ip_traffic\n 3 = test_restrict_http_traffic]" && exit 1 ;;
   esac
 done
 
@@ -137,3 +137,14 @@ test_restrict_http_traffic() {
     && echo "Test passed: Non-HTTP/HTTPS traffic allowed." \
     || echo "Test failed: Policy incorrectly blocked non-HTTP/HTTPS traffic."
 }
+
+case $POLICY_TEST in
+    1) test_restrict_http_traffic
+    ;;
+    2) test_restrict_ip_traffic
+    ;;
+    3) test_restrict_udp_traffic
+    ;;
+    *)
+    ;;
+esac
