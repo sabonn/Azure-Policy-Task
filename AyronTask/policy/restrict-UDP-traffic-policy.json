@@ -35,6 +35,6 @@
         "effect": "[parameters('allowedAction')]"
       }
     },
-    "nonComplianceMessage": "Inbound UDP traffic is not allowed on security rules. Please review your network security rules and remove any inbound UDP traffic configurations."
+    "nonComplianceMessage": "Inbound UDP traffic is not allowed on security rules.\nPlease review your network security rules and remove any inbound UDP traffic configurations."
   }
 }

@@ -3,13 +3,12 @@
 # Default values for testing parameters
 RESOURCE_GROUP="MyTestResourceGroup"
 NSG_NAME="TestNSG"
-ASSIGNMENT_NAME="Restrict-HTTP-Traffic-Assignment"
 
 # Parse command-line arguments for tests
 while getopts "t:" opt; do
   case "$opt" in
     t) POLICY_TEST="$OPTARG" ;;
-    *) echo "Usage: $0 [-p policy_test.\n 1 = test_restrict_udp_traffic\n 2 = test_restrict_ip_traffic\n 3 = test_restrict_http_traffic]" && exit 1 ;;
+    *) echo "t: $0 [-p policy_test.\n 3 = test_restrict_udp_traffic\n 2 = test_restrict_ip_traffic\n 1 = test_restrict_http_traffic]\n a: [assignment_name]" && exit 1 ;;
   esac
 done
 

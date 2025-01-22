@@ -2,17 +2,16 @@
 
 # Default values for the parameters
 POLICY_DEFINITION_FILE="policy-definition.json"  # Path to the JSON file containing the policy definition
-ASSIGNMENT_NAME="TEST-ASSIGNMENT"
 NSG_NAME="TestNSG"
 RESOURCE_GROUP="MyTestResourceGroup"
 
 # Parse command-line arguments (optional parameters)
-while getopts "p:d:s:f:" opt; do
+while getopts "p:a:f:" opt; do
   case "$opt" in
     p) POLICY_NAME="$OPTARG" ;;
     f) POLICY_DEFINITION_FILE="$OPTARG" ;;
-    m) NON_COMPLIANCE_MESSAGE="$OPTARG" ;;
-    *) echo "Usage: $0 [-p policy_name] [-f path_to_policy_definition_file] [-m non_compliance_message]"&& exit 1 ;;
+    a) ASSIGNMENT_NAME= "$OPTARG" ;;
+    *) echo "Usage: $0 [-p policy_name] [-f path_to_policy_definition_file]"&& exit 1 ;;
   esac
 done
 
