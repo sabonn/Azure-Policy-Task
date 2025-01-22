@@ -12,6 +12,13 @@ while getopts "t:" opt; do
   esac
 done
 
+
+echo "Creating a Network Security Group for testing..."
+az network nsg create \
+  --resource-group "$RESOURCE_GROUP" \
+  --name "$NSG_NAME"
+
+
 # Function to test the "Restrict Inbound UDP Traffic" policy
 test_restrict_udp_traffic() {
   echo "Testing 'Restrict Inbound UDP Traffic' policy..."
