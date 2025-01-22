@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "displayName": "Restrict Inbound UDP Traffic",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "Disallow the creation of security rules permitting inbound UDP traffic.",
+    "parameters": {
+      "allowedAction": {
+        "type": "String",
+        "metadata": {
+          "description": "The action to be performed when the policy condition matches (e.g., deny or audit).",
+          "displayName": "Allowed Action"
+        },
+        "defaultValue": "deny"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+            "equals": "Inbound"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/protocol",
+            "equals": "Udp"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('allowedAction')]"
+      }
+    }
+  }
+}

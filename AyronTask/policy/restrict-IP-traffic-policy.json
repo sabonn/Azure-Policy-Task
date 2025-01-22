@@ -1,0 +1,47 @@
+{
+  "properties": {
+    "displayName": "Restrict Inbound Traffic from Source IP 1.2.3.4",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "Disallow the creation of security rules permitting inbound traffic from the source IP address 1.2.3.4.",
+    "parameters": {
+      "restrictedSourceIp": {
+        "type": "String",
+        "metadata": {
+          "description": "The source IP address to be restricted.",
+          "displayName": "Restricted Source IP"
+        },
+        "defaultValue": "1.2.3.4"
+      },
+      "allowedAction": {
+        "type": "String",
+        "metadata": {
+          "description": "The action to be performed when the policy condition matches (e.g., deny or audit).",
+          "displayName": "Allowed Action"
+        },
+        "defaultValue": "deny"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+            "equals": "Inbound"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+            "equals": "[parameters('restrictedSourceIp')]"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('allowedAction')]"
+      }
+    }
+  }
+}
