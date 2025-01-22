@@ -64,8 +64,6 @@
     "displayName": "Restrict inbound HTTP/HTTPS traffic in Network Security Groups",
     "description": "This policy restricts the creation of NSG rules that allow inbound HTTP (80) or HTTPS (443) traffic",
     "category": "Network",
-    "nonComplianceMessage": {
-      "message": "Inbound HTTP (port 80) and HTTPS (port 443) traffic must be restricted in Network Security Groups."
-    }
+    "nonComplianceMessage": "Inbound traffic on ports 80 (HTTP) or 443 (HTTPS) is not allowed.\nPlease ensure that security rules do not permit traffic on these ports."
   }
 }
